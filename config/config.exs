@@ -9,7 +9,11 @@ import Config
 
 config :quiz_app,
   ecto_repos: [QuizApp.Repo],
-  generators: [timestamp_type: :utc_datetime]
+  generators: [timestamp_type: :utc_datetime, binary_id: true]
+
+config :quiz_app, QuizApp.Repo,
+  migration_primary_key: [type: :binary_id],
+  migration_foreign_key: [type: :binary_id]
 
 # Configures the endpoint
 config :quiz_app, QuizAppWeb.Endpoint,

@@ -1,8 +1,8 @@
-defmodule QuizApp.Quiz.Question do
+defmodule QuizApp.Quiz.Item do
   use QuizApp.Schema
   import Ecto.Changeset
 
-  schema "question" do
+  schema "item" do
     field :type, :string, default: "text"
     field :title, :string
 
@@ -10,8 +10,8 @@ defmodule QuizApp.Quiz.Question do
   end
 
   @doc false
-  def changeset(question, attrs) do
-    question
+  def changeset(item, attrs) do
+    item
     |> cast(attrs, [:title, :type])
     |> validate_required([:title, :type])
   end
