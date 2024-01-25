@@ -17,16 +17,24 @@ alias QuizApp.Quiz.{Form, Question, Item, FormAnswers}
 form = Quiz.change_form(%Form{}, %{name: "Protocolo HTTP"}) |> Repo.insert!()
 
 # first question
-question_1 = Quiz.change_question(%Question{}, %{title: "O que é HTTP?"}) |> Repo.insert!()
-Quiz.change_item(%Item{}, %{title: "Biblioteca da linguagem Python"}) |> Repo.insert!()
+question_1 =
+  Quiz.change_question(%Question{}, %{title: "O que é HTTP?", form_id: form.id}) |> Repo.insert!()
+
+Quiz.change_item(%Item{}, %{title: "Biblioteca da linguagem Python", question_id: question_1.id})
+|> Repo.insert!()
 
 item_2 =
   Quiz.change_item(%Item{}, %{
-    title: "Protocolo da camada de aplicação para transferência de hipermídia"
+    title: "Protocolo da camada de aplicação para transferência de hipermídia",
+    question_id: question_1.id
   })
   |> Repo.insert!()
 
-Quiz.change_item(%Item{}, %{title: "Uma banda de rock da década de 70"}) |> Repo.insert!()
+Quiz.change_item(%Item{}, %{
+  title: "Uma banda de rock da década de 70",
+  question_id: question_1.id
+})
+|> Repo.insert!()
 
 Quiz.change_form_answers(%FormAnswers{}, %{
   form_id: form.id,
@@ -38,15 +46,16 @@ Quiz.change_form_answers(%FormAnswers{}, %{
 # second question
 question_2 =
   Quiz.change_question(%Question{}, %{
-    title: "Qual método HTTP é mais utilizado no envio de formulários?"
+    title: "Qual método HTTP é mais utilizado no envio de formulários?",
+    form_id: form.id
   })
   |> Repo.insert!()
 
-Quiz.change_item(%Item{}, %{title: "SEND"}) |> Repo.insert!()
+Quiz.change_item(%Item{}, %{title: "SEND", question_id: question_2.id}) |> Repo.insert!()
 
-item_2 = Quiz.change_item(%Item{}, %{title: "POST"}) |> Repo.insert!()
+item_2 = Quiz.change_item(%Item{}, %{title: "POST", question_id: question_2.id}) |> Repo.insert!()
 
-Quiz.change_item(%Item{}, %{title: "GET"}) |> Repo.insert!()
+Quiz.change_item(%Item{}, %{title: "GET", question_id: question_2.id}) |> Repo.insert!()
 
 Quiz.change_form_answers(%FormAnswers{}, %{
   form_id: form.id,

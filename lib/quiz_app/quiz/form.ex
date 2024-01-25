@@ -2,8 +2,12 @@ defmodule QuizApp.Quiz.Form do
   use QuizApp.Schema
   import Ecto.Changeset
 
+  alias QuizApp.Quiz.Question
+
   schema "form" do
     field :name, :string
+
+    has_many :questions, Question
 
     timestamps(type: :utc_datetime)
   end

@@ -5,6 +5,7 @@ defmodule QuizApp.Repo.Migrations.CreateQuestion do
     create table(:question) do
       add :title, :text, null: false
       add :type, :text, null: false, default: "text"
+      add :form_id, references(:form, type: :uuid), null: false
 
       timestamps(type: :utc_datetime)
     end

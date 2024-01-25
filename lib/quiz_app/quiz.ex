@@ -389,4 +389,17 @@ defmodule QuizApp.Quiz do
   def change_form_answers(%FormAnswers{} = form__answers, attrs \\ %{}) do
     FormAnswers.changeset(form__answers, attrs)
   end
+
+  def get_questions(form_id) do
+    Question
+    |> where([q], q.form_id == ^form_id)
+    |> preload([:item])
+    |> Repo.all()
+  end
+
+  def get_answers(form_id) do
+    FormAnswers
+    |> where([q], q.form_id == ^form_id)
+    |> Repo.all()
+  end
 end
