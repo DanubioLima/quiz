@@ -1,5 +1,6 @@
 defmodule QuizApp.Quiz.Item do
   use QuizApp.Schema
+  use SwissSchema, repo: QuizApp.Repo
   import Ecto.Changeset
 
   alias QuizApp.Quiz.Question
@@ -19,4 +20,5 @@ defmodule QuizApp.Quiz.Item do
     |> cast(attrs, [:title, :type, :question_id])
     |> validate_required([:title, :type, :question_id])
   end
+
 end

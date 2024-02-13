@@ -10,56 +10,43 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
-alias QuizApp.Repo
-alias QuizApp.Quiz
 alias QuizApp.Quiz.{Form, Question, Item, FormAnswers}
 
-form = Quiz.change_form(%Form{}, %{name: "Protocolo HTTP"}) |> Repo.insert!()
+form = Form.insert!(%{name: "Protocolo HTTP"})
 
 # first question
-question_1 =
-  Quiz.change_question(%Question{}, %{title: "O que é HTTP?", form_id: form.id}) |> Repo.insert!()
+question_1 = Question.insert!(%{title: "O que é HTTP?", form_id: form.id})
 
-Quiz.change_item(%Item{}, %{title: "Biblioteca da linguagem Python", question_id: question_1.id})
-|> Repo.insert!()
+Item.insert!(%{title: "Biblioteca da linguagem Python", question_id: question_1.id})
 
 item_2 =
-  Quiz.change_item(%Item{}, %{
+  Item.insert!(%{
     title: "Protocolo da camada de aplicação para transferência de hipermídia",
     question_id: question_1.id
   })
-  |> Repo.insert!()
 
-Quiz.change_item(%Item{}, %{
+Item.insert!(%{
   title: "Uma banda de rock da década de 70",
   question_id: question_1.id
 })
-|> Repo.insert!()
 
-Quiz.change_form_answers(%FormAnswers{}, %{
-  form_id: form.id,
-  question_id: question_1.id,
-  correct_item_id: item_2.id
-})
-|> Repo.insert!()
+FormAnswers.insert!(%{form_id: form.id, question_id: question_1.id, correct_item_id: item_2.id})
 
 # second question
 question_2 =
-  Quiz.change_question(%Question{}, %{
+  Question.insert!(%{
     title: "Qual método HTTP é mais utilizado no envio de formulários?",
     form_id: form.id
   })
-  |> Repo.insert!()
 
-Quiz.change_item(%Item{}, %{title: "SEND", question_id: question_2.id}) |> Repo.insert!()
+Item.insert!(%{title: "SEND", question_id: question_2.id})
 
-item_2 = Quiz.change_item(%Item{}, %{title: "POST", question_id: question_2.id}) |> Repo.insert!()
+item_2 = Item.insert!(%{title: "POST", question_id: question_2.id})
 
-Quiz.change_item(%Item{}, %{title: "GET", question_id: question_2.id}) |> Repo.insert!()
+Item.insert!(%{title: "GET", question_id: question_2.id})
 
-Quiz.change_form_answers(%FormAnswers{}, %{
+FormAnswers.insert!(%{
   form_id: form.id,
   question_id: question_2.id,
   correct_item_id: item_2.id
 })
-|> Repo.insert!()

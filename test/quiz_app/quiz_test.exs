@@ -187,7 +187,11 @@ defmodule QuizApp.QuizTest do
     end
 
     test "create_form__answers/1 with valid data creates a form__answers" do
-      valid_attrs = %{form_id: "7488a646-e31f-11e4-aace-600308960662", question_id: "7488a646-e31f-11e4-aace-600308960662", correct_item_id: "7488a646-e31f-11e4-aace-600308960662"}
+      valid_attrs = %{
+        form_id: "7488a646-e31f-11e4-aace-600308960662",
+        question_id: "7488a646-e31f-11e4-aace-600308960662",
+        correct_item_id: "7488a646-e31f-11e4-aace-600308960662"
+      }
 
       assert {:ok, %Form_Answers{} = form__answers} = Quiz.create_form__answers(valid_attrs)
       assert form__answers.form_id == "7488a646-e31f-11e4-aace-600308960662"
@@ -201,9 +205,16 @@ defmodule QuizApp.QuizTest do
 
     test "update_form__answers/2 with valid data updates the form__answers" do
       form__answers = form__answers_fixture()
-      update_attrs = %{form_id: "7488a646-e31f-11e4-aace-600308960668", question_id: "7488a646-e31f-11e4-aace-600308960668", correct_item_id: "7488a646-e31f-11e4-aace-600308960668"}
 
-      assert {:ok, %Form_Answers{} = form__answers} = Quiz.update_form__answers(form__answers, update_attrs)
+      update_attrs = %{
+        form_id: "7488a646-e31f-11e4-aace-600308960668",
+        question_id: "7488a646-e31f-11e4-aace-600308960668",
+        correct_item_id: "7488a646-e31f-11e4-aace-600308960668"
+      }
+
+      assert {:ok, %Form_Answers{} = form__answers} =
+               Quiz.update_form__answers(form__answers, update_attrs)
+
       assert form__answers.form_id == "7488a646-e31f-11e4-aace-600308960668"
       assert form__answers.question_id == "7488a646-e31f-11e4-aace-600308960668"
       assert form__answers.correct_item_id == "7488a646-e31f-11e4-aace-600308960668"
@@ -211,7 +222,10 @@ defmodule QuizApp.QuizTest do
 
     test "update_form__answers/2 with invalid data returns error changeset" do
       form__answers = form__answers_fixture()
-      assert {:error, %Ecto.Changeset{}} = Quiz.update_form__answers(form__answers, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               Quiz.update_form__answers(form__answers, @invalid_attrs)
+
       assert form__answers == Quiz.get_form__answers!(form__answers.id)
     end
 

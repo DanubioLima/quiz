@@ -1,5 +1,6 @@
 defmodule QuizApp.Quiz.Question do
   use QuizApp.Schema
+  use SwissSchema, repo: QuizApp.Repo
   import Ecto.Changeset
 
   alias QuizApp.Quiz.{Form, Item}

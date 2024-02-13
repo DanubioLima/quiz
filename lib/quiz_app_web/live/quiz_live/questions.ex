@@ -3,59 +3,68 @@ defmodule QuizAppWeb.QuizLive.Questions do
 
   alias QuizApp.Quiz
 
-  alias QuizApp.Quiz.{FormAnswers, Form}
-
-  alias QuizApp.Repo
-
   def render(assigns) do
     ~H"""
     <div class="grid grid-cols-1 gap-10">
-      <.form for={@form} phx-submit="save">
-        <%= for question <- @form[:questions].value do %>
+      <.form for={@form} phx-submit="save" phx-validate="validate">
+        <.inputs_for :let={f} field={@form[:questions]}>
           <div class="bg-blue-200 rounded-2xl shadow-md p-4 mb-6">
-            <h1 class="text-lg font-bold mb-2"><%= question.title %></h1>
-            <div class="bg-gray-300 shadow-md p-4">
-              <%= for item <- question.item do %>
-                <div class="p-2">
-                  <input type="radio" id={item.id} name={question.id} value={item.id} />
-                  <label for={item.id}><%= item.title %></label>
-                </div>
-              <% end %>
-            </div>
+            <h1 class="text-lg font-bold mb-2"><%= f[:title].value %></h1>
+            <.inputs_for :let={fi} field={f[:item]}>
+              <div class="p-2">
+                <input type="radio" id={fi.id} name={f[:item].name} value={fi.data.id} required />
+
+                <label for={fi.id}><%= fi[:title].value %></label>
+              </div>
+            </.inputs_for>
           </div>
-        <% end %>
+        </.inputs_for>
+
         <.button type="submit">Enviar</.button>
-        <pre><%= inspect(@form[:questions].value) %></pre>
       </.form>
     </div>
+
+    <%= if @show_modal do %>
+      <.modal id="finish_form_modal" show={true}>
+        <h1 class="text-2xl font-bold">Parabéns!</h1>
+        <div class="p-4">
+          <p class="text-lg">
+            Você finalizou o questionário com sucesso. Agora é hora de verificar seus acertos
+          </p>
+        </div>
+        <.button>Verificar acertos</.button>
+      </.modal>
+    <% end %>
     """
   end
 
   def mount(%{"form_id" => form_id} = _params, _session, socket) do
     form =
-      Repo.get(Form, form_id)
-      |> Repo.preload(questions: :item)
+      Quiz.get_form!(form_id)
       |> Ecto.Changeset.change()
       |> to_form()
 
-    {:ok, assign(socket, form: form)}
+    {:ok, assign(socket, form: form, transformed_questions: nil, show_modal: false)}
   end
 
   def handle_event("save", params, socket) do
-    params |> dbg()
     form_id = socket.assigns.form.data.id
 
-    answers =
-      Enum.map(params, fn {question_id, item_id} ->
-        answer = Repo.get_by(FormAnswers, question_id: question_id, form_id: form_id)
+    questions = params["form"]["questions"]
 
+    transformed_questions =
+      questions
+      |> Enum.map(fn {_key, value} ->
         %{
-          question_id: question_id,
-          is_correct: answer.correct_item_id == item_id
+          "question_id" => value["id"],
+          "user_item_id" => value["item"]
         }
       end)
-      |> dbg()
 
-    {:noreply, assign(socket, answers: answers)}
+    transformed_questions |> dbg()
+
+    Quiz.save_user_answers(transformed_questions, form_id)
+
+    {:noreply, assign(socket, transformed_questions: transformed_questions, show_modal: true)}
   end
 end
