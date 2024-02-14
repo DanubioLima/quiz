@@ -32,6 +32,7 @@ defmodule QuizApp.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # phoenix deps
       {:phoenix, "~> 1.7.10"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.10"},
@@ -51,8 +52,10 @@ defmodule QuizApp.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
-      # my deps
-      {:swiss_schema, "~> 0.5.1"}
+      # specific project deps
+      {:swiss_schema, "~> 0.5.1"},
+      {:ex_machina, "~> 2.7.0", only: :test},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 

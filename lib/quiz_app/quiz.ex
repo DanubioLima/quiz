@@ -7,14 +7,14 @@ defmodule QuizApp.Quiz do
   alias QuizApp.Quiz.FormAnswers
   alias QuizApp.Repo
 
-  alias QuizApp.Quiz.{UserAnswers, Question, Form}
+  alias QuizApp.Quiz.{UserAnswers, Form}
 
   @doc """
   Returns a form or raise an exception if not found.
   """
   def get_form!(form_id) do
     Repo.get!(Form, form_id)
-    |> Repo.preload(questions: :item)
+    |> Repo.preload(questions: :items)
   end
 
   def list_form() do

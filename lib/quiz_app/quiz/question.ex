@@ -1,4 +1,8 @@
 defmodule QuizApp.Quiz.Question do
+  @moduledoc """
+  Question schema
+  """
+
   use QuizApp.Schema
   use SwissSchema, repo: QuizApp.Repo
   import Ecto.Changeset
@@ -10,7 +14,7 @@ defmodule QuizApp.Quiz.Question do
     field :title, :string
 
     belongs_to :form, Form
-    has_many :item, Item
+    has_many :items, Item
 
     timestamps(type: :utc_datetime)
   end

@@ -1,4 +1,8 @@
 defmodule QuizApp.Schema do
+  @moduledoc """
+  Default QuizApp schema that uses Ecto Schema with some configurations
+  """
+
   defmacro __using__(_) do
     quote do
       use Ecto.Schema

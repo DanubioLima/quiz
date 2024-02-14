@@ -1,4 +1,8 @@
 defmodule QuizApp.Quiz.UserAnswers do
+  @moduledoc """
+  UserAnswers schema
+  """
+
   use QuizApp.Schema
   use SwissSchema, repo: QuizApp.Repo
   import Ecto.Changeset

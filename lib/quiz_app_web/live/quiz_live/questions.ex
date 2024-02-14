@@ -61,8 +61,6 @@ defmodule QuizAppWeb.QuizLive.Questions do
         }
       end)
 
-    transformed_questions |> dbg()
-
     Quiz.save_user_answers(transformed_questions, form_id)
 
     {:noreply, assign(socket, transformed_questions: transformed_questions, show_modal: true)}
