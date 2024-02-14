@@ -5,7 +5,7 @@ defmodule QuizApp.Factory do
 
   use ExMachina.Ecto, repo: QuizApp.Repo
 
-  alias QuizApp.Quiz.{Question, Item, Form}
+  alias QuizApp.Quiz.{Question, Item, Form, FormAnswers}
 
   def form_factory do
     %Form{
@@ -23,5 +23,9 @@ defmodule QuizApp.Factory do
     %Item{
       title: sequence(:title, &"-#{&1}")
     }
+  end
+
+  def form_answers_factory do
+    %FormAnswers{}
   end
 end

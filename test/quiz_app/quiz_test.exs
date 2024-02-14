@@ -2,7 +2,7 @@ defmodule QuizApp.QuizTest do
   use QuizApp.DataCase, async: true
 
   alias QuizApp.Quiz
-  alias QuizApp.Quiz.{Form, Question, Item}
+  alias QuizApp.Quiz.{Form, Question, Item, UserAnswers}
 
   import QuizApp.Factory
 
@@ -49,6 +49,42 @@ defmodule QuizApp.QuizTest do
     test "returns the forms" do
       insert(:form, name: "Neural Networks")
       assert [%Form{}] = Quiz.list_form()
+    end
+  end
+
+  describe "save_user_answers/2" do
+    test "save" do
+      # GIVEN
+      form = insert(:form, name: "Neural Networks")
+      question_1 = insert(:question, form: form)
+      item_1 = insert(:item, question: question_1)
+
+      question_2 = insert(:question, form: form)
+      item_2 = insert(:item, question: question_1)
+
+      insert(:form_answers, form: form, question: question_1, correct_item: item_1)
+      insert(:form_answers, form: form, question: question_2, correct_item: item_2)
+
+      user_answers = [
+        %{"question_id" => question_1.id, "user_item_id" => item_1.id},
+        %{"question_id" => question_2.id, "user_item_id" => item_2.id}
+      ]
+
+      # WHEN
+      Quiz.save_user_answers(user_answers, form.id)
+
+      # THEN
+      question_id_1 = question_1.id
+      question_id_2 = question_2.id
+
+      assert [
+               %UserAnswers{
+                 question_id: ^question_id_1
+               },
+               %UserAnswers{
+                 question_id: ^question_id_2
+               }
+             ] = Quiz.list_user_answers_by_form(form.id)
     end
   end
 end

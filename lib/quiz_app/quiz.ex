@@ -21,19 +21,26 @@ defmodule QuizApp.Quiz do
     Form.all()
   end
 
-  def save_user_answers(questions, form_id) do
+  def save_user_answers(answers, form_id) do
     Repo.transaction(fn ->
-      Enum.each(questions, fn question ->
+      Enum.each(answers, fn answer ->
         %{correct_item_id: correct_item_id} =
-          FormAnswers.get_by!(%{form_id: form_id, question_id: question["question_id"]})
+          FormAnswers.get_by!(%{form_id: form_id, question_id: answer["question_id"]})
 
         UserAnswers.insert!(%{
           form_id: form_id,
-          question_id: question["question_id"],
+          question_id: answer["question_id"],
           correct_item_id: correct_item_id,
-          user_item_id: question["user_item_id"]
+          user_item_id: answer["user_item_id"]
         })
       end)
     end)
+  end
+
+  def list_user_answers_by_form(form_id) do
+    UserAnswers
+    |> where([u], u.form_id == ^form_id)
+    |> order_by(desc: :inserted_at)
+    |> Repo.all()
   end
 end

@@ -10,7 +10,7 @@ defmodule QuizAppWeb.QuizLive.Questions do
         <.inputs_for :let={f} field={@form[:questions]}>
           <div class="bg-blue-200 rounded-2xl shadow-md p-4 mb-6">
             <h1 class="text-lg font-bold mb-2"><%= f[:title].value %></h1>
-            <.inputs_for :let={fi} field={f[:item]}>
+            <.inputs_for :let={fi} field={f[:items]}>
               <div class="p-2">
                 <input type="radio" id={fi.id} name={f[:item].name} value={fi.data.id} required />
 
@@ -27,11 +27,12 @@ defmodule QuizAppWeb.QuizLive.Questions do
     <%= if @show_modal do %>
       <.modal id="finish_form_modal" show={true}>
         <h1 class="text-2xl font-bold">Parabéns!</h1>
-        <div class="p-4">
+        <div class="py-2">
           <p class="text-lg">
-            Você finalizou o questionário com sucesso. Agora é hora de verificar seus acertos
+            Você finalizou o questionário com sucesso. Agora é hora de verificar seus acertos.
           </p>
         </div>
+        <div class="border-t border-gray-300 my-6"></div>
         <.button>Verificar acertos</.button>
       </.modal>
     <% end %>
@@ -44,7 +45,7 @@ defmodule QuizAppWeb.QuizLive.Questions do
       |> Ecto.Changeset.change()
       |> to_form()
 
-    {:ok, assign(socket, form: form, transformed_questions: nil, show_modal: false)}
+    {:ok, assign(socket, form: form, show_modal: false)}
   end
 
   def handle_event("save", params, socket) do
@@ -52,7 +53,7 @@ defmodule QuizAppWeb.QuizLive.Questions do
 
     questions = params["form"]["questions"]
 
-    transformed_questions =
+    answers =
       questions
       |> Enum.map(fn {_key, value} ->
         %{
@@ -61,8 +62,8 @@ defmodule QuizAppWeb.QuizLive.Questions do
         }
       end)
 
-    Quiz.save_user_answers(transformed_questions, form_id)
+    {:ok, _} = Quiz.save_user_answers(answers, form_id)
 
-    {:noreply, assign(socket, transformed_questions: transformed_questions, show_modal: true)}
+    {:noreply, assign(socket, show_modal: true)}
   end
 end
