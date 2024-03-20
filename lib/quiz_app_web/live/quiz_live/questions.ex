@@ -33,7 +33,9 @@ defmodule QuizAppWeb.QuizLive.Questions do
           </p>
         </div>
         <div class="border-t border-gray-300 my-6"></div>
-        <.button>Verificar acertos</.button>
+        <.button phx-click="view_answers" phx-value-form_id={@form.data.id}>
+          Verificar acertos
+        </.button>
       </.modal>
     <% end %>
     """
@@ -46,6 +48,10 @@ defmodule QuizAppWeb.QuizLive.Questions do
       |> to_form()
 
     {:ok, assign(socket, form: form, show_modal: false)}
+  end
+
+  def handle_event("view_answers", %{"form_id" => form_id} = _params, socket) do
+    {:noreply, push_navigate(socket, to: ~p"/quiz/answers/#{form_id}")}
   end
 
   def handle_event("save", params, socket) do

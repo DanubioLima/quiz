@@ -20,6 +20,7 @@ defmodule QuizAppWeb.Router do
     get "/", PageController, :home
     live "/quiz", QuizLive.Index, :index
     live "/quiz/:form_id", QuizLive.Questions, :index
+    live "/quiz/answers/:form_id", QuizLive.Answers, :index
   end
 
   # Other scopes may use custom stacks.

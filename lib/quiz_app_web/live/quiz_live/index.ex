@@ -20,6 +20,6 @@ defmodule QuizAppWeb.QuizLive.Index do
   end
 
   def handle_event("to_form", %{"form_id" => form_id}, socket) do
-    {:noreply, push_patch(socket, to: ~p"/quiz/#{form_id}")}
+    {:noreply, push_navigate(socket, to: ~p"/quiz/#{form_id}")}
   end
 end

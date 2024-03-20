@@ -11,6 +11,16 @@ services:
       - quiz-app-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      ADMINER_DESIGN: dracula
+      ADMINER_DEFAULT_SERVER: postgres
+    ports:
+      - 8080:8080
 
 volumes:
   quiz-app-data:
